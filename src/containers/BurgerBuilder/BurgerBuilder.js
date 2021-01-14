@@ -27,7 +27,8 @@ class BurgerBuilder extends Component {
             meat: 0,
         },
         totalPrice: 4,
-        purchasable: false
+        purchasable: false,
+        purchasing: false,
     }
 
     updatePurchaseState(ingredients) {
@@ -93,6 +94,15 @@ class BurgerBuilder extends Component {
         this.updatePurchaseState(updatedIngredients);
     }
 
+    // normal function syntax using "this" won't work if the method is triggered throw an event
+    // for example "purchaseHandler() {"
+    // => the key-word "this" will reference a different execution context
+    //    and "setState" might not be available or a different object
+    // ES6 Arrow function will contain the context of "this"
+    purchaseHandler = () => {
+        this.setState({purchasing: true});
+    }
+
     render() {
         // copy the ingredient object and add information if remove-button must be disabled
         const disableInfo = {
@@ -105,7 +115,7 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
-                <Modal>
+                <Modal show={this.state.purchasing}>
                     <OrderSummary ingredients={this.state.ingredients}/>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
@@ -114,6 +124,7 @@ class BurgerBuilder extends Component {
                     ingredientRemoved={this.removeIngredientHandler}
                     disabled={disableInfo}
                     purchasable={this.state.purchasable}
+                    ordered={this.purchaseHandler}
                     price={this.state.totalPrice}/>
             </Aux>
         );
