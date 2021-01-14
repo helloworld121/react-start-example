@@ -1,0 +1,1 @@
+hoc = Higher Order Component
