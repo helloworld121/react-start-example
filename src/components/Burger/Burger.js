@@ -5,7 +5,7 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
     // transform object to an array
-    const transformedIngredients =
+    let transformedIngredients =
         Object
             .keys(props.ingredients)
             .map(ingredientKey => {
@@ -17,7 +17,17 @@ const burger = (props) => {
                     // we just use the index for the key of the Component
                     return <BurgerIngredient key={ingredientKey + i} type={ingredientKey} />
                 })
-            });
+            })
+            // currently the result looks like this // [Array(0), Array(0), Array(0), Array(0)]
+            // but we want to flatten the array to for example check if we got ingredients
+            .reduce((arr, el) => {
+                return arr.concat(el)
+            }, [])
+    ;
+
+    if(transformedIngredients.length === 0) {
+        transformedIngredients = <p>Please start adding ingredients!</p>;
+    }
 
     return (
         <div className={classes.Burger}>
