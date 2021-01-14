@@ -1,0 +1,9 @@
+.Backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed; /* to keep it in position even on scrolling */
+    z-index: 100; /* the value must be lower than the modal, cause the modal should sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
