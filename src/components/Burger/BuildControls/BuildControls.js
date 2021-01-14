@@ -18,7 +18,9 @@ const buildControls = (props) => (
                 label={control.label}
                 // add this point we got information about the type
                 // => that type can be passed as a arrow function so we don't need to pass it to the Component
-                added={() => props.ingredientAdded(control.type)}/>
+                added={() => props.ingredientAdded(control.type)}
+                removed={() => props.ingredientRemoved(control.type)}
+                disabled={props.disabled[control.type]}/>
         ))}
     </div>
 );
