@@ -15,7 +15,12 @@ class Modal extends Component {
     // we can wrap the exported component (function-based) with react-memo
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         // we only need to update this component when "show" changes
-        return nextProps.show !== this.props.show;
+        //return nextProps.show !== this.props.show;
+
+        // there is a problem if we use the Spinner
+        // => because we only update the component if the show state changes
+        // => but using the the Spinner, just the children of the modal changes => that also should trigger an update
+        return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
     }
 
     render () {
