@@ -15,7 +15,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
         constructor(props, context) {
             super(props, context);
 
-            console.log('[withErrorHandler] componentDidMount');
+            // console.log('[withErrorHandler] constructor');
             // add interceptor for request to CLEAN state
             this.reqInterceptor = axios.interceptors.request.use(
                 request => {
@@ -31,13 +31,22 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 })
         }
 
+        // we might create the Instance of this Components multiple times
+        // => this leads to multiple interceptors we add to axios
+        // => this leads to memory issues
+        // => therefore we need to remove those interceptors
+        componentWillUnmount() {
+            // console.log('[withErrorHandler] componentWillUnmount', this.reqInterceptor, this.resInterceptor);
+            axios.interceptors.request.eject(this.reqInterceptor);
+            axios.interceptors.response.eject(this.resInterceptor);
+        }
 
         errorConfirmedHandler = () => {
             this.setState({error: null});
         }
 
         render () {
-            console.log('[withErrorHandler] render');
+            // console.log('[withErrorHandler] render');
             return (
                 <Aux>
                     <Modal
