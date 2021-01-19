@@ -10,7 +10,11 @@ const withErrorHandler = (WrappedComponent, axios) => {
             error: null
         }
 
-        componentDidMount() {
+        // the interceptor must be added before the component was mounted
+        // => because an error might occur when loading the application
+        constructor(props, context) {
+            super(props, context);
+
             console.log('[withErrorHandler] componentDidMount');
             // add interceptor for request to CLEAN state
             this.reqInterceptor = axios.interceptors.request.use(
@@ -27,11 +31,13 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 })
         }
 
+
         errorConfirmedHandler = () => {
             this.setState({error: null});
         }
 
         render () {
+            console.log('[withErrorHandler] render');
             return (
                 <Aux>
                     <Modal

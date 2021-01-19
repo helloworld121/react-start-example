@@ -34,13 +34,18 @@ class BurgerBuilder extends Component {
         purchasable: false,
         purchasing: false,
         loading: false,
+        error: false
     }
 
     componentDidMount() {
         axios.get('/ingredients.json')
             .then(response => {
-                console.log('[BurgerBuilder] componentDidMount:', response.data)
+                // console.log('[BurgerBuilder] componentDidMount:', response.data)
                 this.setState({ingredients: response.data});
+            })
+            // if the "catch" block is missing, the "then" block will be executed even if an error occurred
+            .catch(error => {
+                this.setState({error: true});
             });
     }
 
@@ -158,7 +163,8 @@ class BurgerBuilder extends Component {
         // structure: {salad: true, meat: false, ....}
         let orderSummary = null;
 
-        let burger = <Spinner/>;
+        // if ingredients could not be loaded we display a message an not a spinner
+        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         if(this.state.ingredients) {
             burger = (
                 <Aux>
