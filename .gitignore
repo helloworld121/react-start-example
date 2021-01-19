@@ -7,3 +7,6 @@
 # ide
 .idea
 
+# configurations
+/src/environment.js
+/src/environment.json
