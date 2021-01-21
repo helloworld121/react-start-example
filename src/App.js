@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Route, Switch} from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
@@ -6,22 +7,24 @@ import Checkout from './containers/Checkout/Checkout';
 
 class App extends Component {
 
-    // state = {
-    //     show: true
-    // }
-
-    // this is just to test if withErrorHandler => unmount gets called
-    // componentDidMount() {
-    //     setTimeout(() => {this.setState({show:false})}, 5000);
-    // }
-
     render() {
         return (
             <div>
                 <Layout>
-                    <BurgerBuilder/>
-                    {/*{this.state.show ? <BurgerBuilder/> : null}*/}
-                    <Checkout />
+                    {/*
+                        having one route "/"
+                        there are two possible ways to make route under "/" not render on every url
+                        => one way is using "exact" which will check for an exact match
+                        => the other way is using "<Switch>" but in this case the order will matter
+                           => because the first match will be rendered
+                              or we use exact
+
+                        the example below display both solutions
+                    */}
+                    <Switch>
+                        <Route path="/checkout" component={Checkout}/>
+                        <Route path="/" exact component={BurgerBuilder}/>
+                    </Switch>
                 </Layout>
             </div>
         );
