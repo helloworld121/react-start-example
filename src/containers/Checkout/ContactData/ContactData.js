@@ -53,9 +53,11 @@ class ContactData extends Component {
                         {value: 'fastest', displayValue: 'Fastest'},
                         {value: 'cheapest', displayValue: 'Cheapest'},
                     ]},
-                value: ''
+                value: '',
+                valid: true
             },
         },
+        formIsValid: false,
         loading: false
     }
 
@@ -117,25 +119,30 @@ class ContactData extends Component {
         // console.log(event.target.value);
         // attention we need to set the state in an immutable way
         // ATTENTION THE SPREAD OPERATOR WON'T CLONE DEEPLY
-        const updateOrderForm = {
+        const updatedOrderForm = {
             ...this.state.orderForm
         };
         // because we just want to update the nested field "value"
         // it will be enough if we clone just the formElement
         // => if we want to change something more deeply we need to take care of those nested objects
-        const updateFormElement = {
-            ...updateOrderForm[inputIdentifier]
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
         };
-        updateFormElement.value = event.target.value;
-        updateFormElement.valid = this.checkValidity(updateFormElement.value, updateFormElement.validation);
-        updateFormElement.touched = true;
+        updatedFormElement.value = event.target.value;
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.touched = true;
         // now we can update our cloned form
-        updateOrderForm[inputIdentifier] = updateFormElement;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
 
         // console.log(updateFormElement);
 
+        let formIsValid = true;
+        for(let inputIdentifier in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        }
+
         // now we can update the state
-        this.setState({orderForm: updateOrderForm});
+        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
     }
 
     render () {
@@ -164,7 +171,7 @@ class ContactData extends Component {
                         // => therefore we use a arrow function (it won't be executed directly
                         changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
                 ))}
-                <Button btnType="Success">ORDER</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
         );
         if(this.state.loading) {
