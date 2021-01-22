@@ -13,10 +13,23 @@ class Checkout extends Component {
         }
     }
 
+    checkoutCancelledHandler = () => {
+        // we have access to the router props
+        // => and in the thistory-prop we have the "goBack()" method
+        this.props.history.goBack();
+    }
+
+    checkoutContinuedHandler = () => {
+        this.props.history.replace('/checkout/contact-data');
+    }
+
     render() {
         return (
             <div>
-                <CheckoutSummary ingredients={this.state.ingredients}/>
+                <CheckoutSummary
+                    ingredients={this.state.ingredients}
+                    checkoutCancelled={this.checkoutCancelledHandler}
+                    checkoutContinued={this.checkoutContinuedHandler}/>
             </div>
         );
     }
