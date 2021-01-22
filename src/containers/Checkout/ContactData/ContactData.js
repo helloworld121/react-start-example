@@ -14,27 +14,37 @@ class ContactData extends Component {
             name: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'Your Name'},
-                value: ''
+                value: '',
+                validation: {required: true},
+                valid: false
             },
             street: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'Street'},
-                value: ''
+                value: '',
+                validation: {required: true},
+                valid: false
             },
             zipCode: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'ZIP Code'},
-                value: ''
+                value: '',
+                validation: {required: true, minLength: 5, maxLength: 5},
+                valid: false
             },
             country: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'Country'},
-                value: ''
+                value: '',
+                validation: {required: true},
+                valid: false
             },
             email: {
                 elementType: 'email',
                 elementConfig: {type: 'text', placeholder: 'Your E-Mail'},
-                value: ''
+                value: '',
+                validation: {required: true},
+                valid: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -83,6 +93,24 @@ class ContactData extends Component {
 
     }
 
+    checkValidity(value, rules) {
+        let isValid = true;
+
+        if(rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if(rules.minLength) {
+            isValid = value.length >= rules.minLength && isValid;
+        }
+
+        if(rules.maxLength) {
+            isValid = value.length <= rules.maxLength && isValid;
+        }
+
+        return isValid;
+    }
+
     // the event on its own won't be enough
     // => we need to identify the targeted object to set its "value"
     inputChangedHandler = (event, inputIdentifier) => {
@@ -99,8 +127,11 @@ class ContactData extends Component {
             ...updateOrderForm[inputIdentifier]
         };
         updateFormElement.value = event.target.value;
+        updateFormElement.valid = this.checkValidity(updateFormElement.value, updateFormElement.validation);
         // now we can update our cloned form
         updateOrderForm[inputIdentifier] = updateFormElement;
+
+        console.log(updateFormElement);
 
         // now we can update the state
         this.setState({orderForm: updateOrderForm});
