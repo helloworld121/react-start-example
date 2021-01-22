@@ -7,24 +7,31 @@ import ContactData from './ContactData/ContactData';
 class Checkout extends Component {
     // TODO this is some dummy state for now
     state = {
-        ingredients: {
-            salad: 1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
-        }
+        ingredients: null,
+        totalPrice: null
     }
 
-    // everytime we load this component it will mount itself
-    // => therefore we can use 'componentDidMount'
-    // it is not nested in another page or something like this
-    componentDidMount() {
+
+
+    // 1) everytime we load this component it will mount itself
+    //    => therefore we can use 'componentDidMount'
+    //    it is not nested in another page or something like this
+    // 2) we must not use componentDidMount if we initialize ingredients in here
+    //    => because this will be called after rendering
+    //       and if we pass null to ContactData and the Burger component those will fail
+    UNSAFE_componentWillMount() {
         const query = new URLSearchParams(this.props.location.search);
         const ingredients = {};
+        let price = null;
         for(let param of query.entries()) {
-            ingredients[param[0]] = +param[1];
+            // TODO workaround to extract the price from queryParams
+            if(param[0] === 'price') {
+                price = param[1];
+            } else {
+                ingredients[param[0]] = +param[1];
+            }
         }
-        this.setState({ingredients: ingredients});
+        this.setState({ingredients: ingredients, totalPrice: price});
     }
 
     checkoutCancelledHandler = () => {
@@ -47,10 +54,11 @@ class Checkout extends Component {
                 {/*<Route */}
                 {/*    path={this.props.match.path + '/contact-data'} */}
                 {/*    component={ContactData} />*/}
-                {/* to pass data using the Route => we can use the render method */}
+
+                {/* to pass data using the Route => we can use the render method/parameter */}
                 <Route
                     path={this.props.match.path + '/contact-data'}
-                    render={() => (<ContactData ingredients={this.state.ingredients}/>)}/>
+                    render={() => (<ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} {...this.props}/>)}/>
             </div>
         );
     }
