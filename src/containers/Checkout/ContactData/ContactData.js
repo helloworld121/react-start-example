@@ -131,7 +131,7 @@ class ContactData extends Component {
         // now we can update our cloned form
         updateOrderForm[inputIdentifier] = updateFormElement;
 
-        console.log(updateFormElement);
+        // console.log(updateFormElement);
 
         // now we can update the state
         this.setState({orderForm: updateOrderForm});
@@ -156,6 +156,8 @@ class ContactData extends Component {
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
                         // we need to pass more data to the handler
                         // => therefore we use a arrow function (it won't be executed directly
                         changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
