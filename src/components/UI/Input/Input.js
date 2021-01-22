@@ -5,18 +5,30 @@ import classes from './Input.module.css';
 const input = (props) => {
     let inputElement;
 
-    // using the spread operator we will pass all given attributes to the component
-    // =>  {...props}
-    // => this will reduce the complexity because we can use the standard html-attributes
-    switch(props.inputtype) {
+    // 1) using the spread operator we will pass all given attributes to the component
+    //    => {...props}
+    //    => this will reduce the complexity because we can use the standard html-attributes
+    // 2) attention: the spread-operator will pass all attributes
+    //    => therefore also not-html-attributes will be passed
+    //       if they are not lowercase they will raise an error
+    switch(props.elementType) {
         case('input'):
-            inputElement = <input className={classes.InputElement} {...props}/>;
+            inputElement = <input
+                className={classes.InputElement}
+                {...props.elementConfig}
+                value={props.value}/>;
             break;
         case('textarea'):
-            inputElement = <textarea className={classes.InputElement} {...props}/>;
+            inputElement = <textarea
+                className={classes.InputElement}
+                {...props.elementConfig}
+                value={props.value}/>;
             break;
         default:
-            inputElement = <input className={classes.InputElement} {...props}/>;
+            inputElement = <input
+                className={classes.InputElement}
+                {...props.elementConfig}
+                value={props.value}/>;
     }
 
     return (
