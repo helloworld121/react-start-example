@@ -5,6 +5,7 @@ import classes from './Burger.module.css'
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
+    // alternative approach to convert in Order.js
     // transform object to an array
     let transformedIngredients =
         Object
