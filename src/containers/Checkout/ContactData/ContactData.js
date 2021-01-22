@@ -16,35 +16,35 @@ class ContactData extends Component {
                 elementConfig: {type: 'text', placeholder: 'Your Name'},
                 value: '',
                 validation: {required: true},
-                valid: false
+                valid: false, touched: false
             },
             street: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'Street'},
                 value: '',
                 validation: {required: true},
-                valid: false
+                valid: false, touched: false
             },
             zipCode: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'ZIP Code'},
                 value: '',
                 validation: {required: true, minLength: 5, maxLength: 5},
-                valid: false
+                valid: false, touched: false
             },
             country: {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'Country'},
                 value: '',
                 validation: {required: true},
-                valid: false
+                valid: false, touched: false
             },
             email: {
                 elementType: 'email',
                 elementConfig: {type: 'text', placeholder: 'Your E-Mail'},
                 value: '',
                 validation: {required: true},
-                valid: false
+                valid: false, touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
@@ -128,6 +128,7 @@ class ContactData extends Component {
         };
         updateFormElement.value = event.target.value;
         updateFormElement.valid = this.checkValidity(updateFormElement.value, updateFormElement.validation);
+        updateFormElement.touched = true;
         // now we can update our cloned form
         updateOrderForm[inputIdentifier] = updateFormElement;
 
@@ -158,6 +159,7 @@ class ContactData extends Component {
                         value={formElement.config.value}
                         invalid={!formElement.config.valid}
                         shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
                         // we need to pass more data to the handler
                         // => therefore we use a arrow function (it won't be executed directly
                         changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
