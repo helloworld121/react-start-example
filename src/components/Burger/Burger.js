@@ -1,4 +1,5 @@
 import React from 'react';
+// import {withRouter} from 'react-router-dom';
 
 import classes from './Burger.module.css'
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
@@ -38,4 +39,7 @@ const burger = (props) => {
     );
 };
 
+// if we wrap the exported component with a hoc named "withRouter"
+// we will get access to to those special router-props
+// export default withRouter(burger);
 export default burger;
