@@ -13,6 +13,18 @@ class Checkout extends Component {
         }
     }
 
+    // everytime we load this component it will mount itself
+    // => therefore we can use 'componentDidMount'
+    // it is not nested in another page or something like this
+    componentDidMount() {
+        const query = new URLSearchParams(this.props.location.search);
+        const ingredients = {};
+        for(let param of query.entries()) {
+            ingredients[param[0]] = +param[1];
+        }
+        this.setState({ingredients: ingredients});
+    }
+
     checkoutCancelledHandler = () => {
         // we have access to the router props
         // => and in the thistory-prop we have the "goBack()" method

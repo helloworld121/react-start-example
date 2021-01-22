@@ -128,7 +128,18 @@ class BurgerBuilder extends Component {
     purchaseContinueHandler = () => {
         // everything that gets loaded via a route gets that special props
         // we push a new page on the stack of pages
-        this.props.history.push('/checkout');
+        // this.props.history.push('/checkout');
+
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(
+                encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
 
         //alert('you continue!');
         // this.setState({loading: true});
