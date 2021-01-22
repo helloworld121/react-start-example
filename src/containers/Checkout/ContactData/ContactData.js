@@ -76,6 +76,29 @@ class ContactData extends Component {
 
     }
 
+    // the event on its own won't be enough
+    // => we need to identify the targeted object to set its "value"
+    inputChangedHandler = (event, inputIdentifier) => {
+        // console.log(event.target.value);
+        // attention we need to set the state in an immutable way
+        // ATTENTION THE SPREAD OPERATOR WON'T CLONE DEEPLY
+        const updateOrderForm = {
+            ...this.state.orderForm
+        };
+        // because we just want to update the nested field "value"
+        // it will be enough if we clone just the formElement
+        // => if we want to change something more deeply we need to take care of those nested objects
+        const updateFormElement = {
+            ...updateOrderForm[inputIdentifier]
+        };
+        updateFormElement.value = event.target.value;
+        // now we can update our cloned form
+        updateOrderForm[inputIdentifier] = updateFormElement;
+
+        // now we can update the state
+        this.setState({orderForm: updateOrderForm});
+    }
+
     render () {
         // convert the form-object into an array
         // => so it is possible to loop over it
@@ -94,7 +117,10 @@ class ContactData extends Component {
                         key={formElement.id}
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value} />
+                        value={formElement.config.value}
+                        // we need to pass more data to the handler
+                        // => therefore we use a arrow function (it won't be executed directly
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
                 ))}
                 <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
             </form>
