@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -65,7 +66,7 @@ class ContactData extends Component {
     orderHandler = (event) => {
         // the default is, that the form sends a request => we don't want this
         event.preventDefault();
-        // console.log(this.props.ingredients);
+        // console.log(this.props.ings);
         this.setState({loading: true});
 
         // read data from state
@@ -75,7 +76,7 @@ class ContactData extends Component {
         }
 
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ings,
             price: this.props.price,
             orderData: formData,
         }
@@ -194,4 +195,11 @@ class ContactData extends Component {
 
 }
 
-export default ContactData;
+const mapStateToProps = (state) => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice,
+    }
+};
+
+export default connect(mapStateToProps)(ContactData);

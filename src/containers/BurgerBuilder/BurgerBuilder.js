@@ -20,7 +20,6 @@ class BurgerBuilder extends Component {
     //     this.state = {...}
     // }
     state = {
-        purchasable: false,
         purchasing: false,
         loading: false,
         error: false
@@ -52,7 +51,7 @@ class BurgerBuilder extends Component {
                 return sum + el;
             }, 0); // 0 is the initial value for sum
 
-        this.setState({purchasable: sum > 0})
+        return sum > 0
     }
 
     // normal function syntax using "this" won't work if the method is triggered throw an event
@@ -71,21 +70,7 @@ class BurgerBuilder extends Component {
         // everything that gets loaded via a route gets that special props
         // we push a new page on the stack of pages
         // this.props.history.push('/checkout');
-
-        const queryParams = [];
-        // add ingredients
-        for (let i in this.state.ingredients) {
-            queryParams.push(
-                encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
-        }
-        // add price
-        queryParams.push('price=' + this.state.totalPrice);
-
-        const queryString = queryParams.join('&');
-        this.props.history.push({
-            pathname: '/checkout',
-            search: '?' + queryString
-        });
+        this.props.history.push('/checkout');
 
         //alert('you continue!');
     }
@@ -111,7 +96,7 @@ class BurgerBuilder extends Component {
                         ingredientAdded={this.props.onIngredientAdded}
                         ingredientRemoved={this.props.onIngredientRemoved}
                         disabled={disableInfo}
-                        purchasable={this.state.purchasable}
+                        purchasable={this.updatePurchaseState(this.props.ings)}
                         ordered={this.purchaseHandler}
                         price={this.props.price}/>
                 </Aux>

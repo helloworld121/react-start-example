@@ -1,38 +1,11 @@
 import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
-    // TODO this is some dummy state for now
-    state = {
-        ingredients: null,
-        totalPrice: null
-    }
-
-
-
-    // 1) everytime we load this component it will mount itself
-    //    => therefore we can use 'componentDidMount'
-    //    it is not nested in another page or something like this
-    // 2) we must not use componentDidMount if we initialize ingredients in here
-    //    => because this will be called after rendering
-    //       and if we pass null to ContactData and the Burger component those will fail
-    UNSAFE_componentWillMount() {
-        const query = new URLSearchParams(this.props.location.search);
-        const ingredients = {};
-        let price = null;
-        for(let param of query.entries()) {
-            // TODO workaround to extract the price from queryParams
-            if(param[0] === 'price') {
-                price = param[1];
-            } else {
-                ingredients[param[0]] = +param[1];
-            }
-        }
-        this.setState({ingredients: ingredients, totalPrice: price});
-    }
 
     checkoutCancelledHandler = () => {
         // we have access to the router props
@@ -48,7 +21,7 @@ class Checkout extends Component {
         return (
             <div>
                 <CheckoutSummary
-                    ingredients={this.state.ingredients}
+                    ingredients={this.props.ings}
                     checkoutCancelled={this.checkoutCancelledHandler}
                     checkoutContinued={this.checkoutContinuedHandler}/>
                 {/*<Route */}
@@ -56,13 +29,33 @@ class Checkout extends Component {
                 {/*    component={ContactData} />*/}
 
                 {/* to pass data using the Route => we can use the render method/parameter */}
+
+                {/* NOW: after we use redux, we don't need the workaround 'render' to bypass parameter */}
                 <Route
                     path={this.props.match.path + '/contact-data'}
-                    render={() => (<ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} {...this.props}/>)}/>
+                    component={ContactData}/>
+                {/*
+                <Route
+                    path={this.props.match.path + '/contact-data'}
+                    render={() => (
+                        <ContactData
+                            ingredients={this.props.ings}
+                            price={this.props.price}
+                            {...this.props}/>
+                    )}/>
+                */}
             </div>
         );
     }
 
 }
 
-export default Checkout;
+const mapStateToProps = (state) => {
+    return {
+        ings: state.ingredients,
+    }
+}
+
+// we don't dispatch in here for now, therefore we don't need it right now
+
+export default connect(mapStateToProps)(Checkout);
