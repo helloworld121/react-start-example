@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
 
 
 import './index.css';
@@ -12,12 +13,15 @@ import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import reportWebVitals from './reportWebVitals';
 
 
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // create store
 const store = createStore(
     burgerBuilderReducer,
     // Redux DevTools Extension
-    // => For a basic Redux store we need to add
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    // => setting up the redux store with middleware and enhancers
+    composeEnhancers(applyMiddleware(thunk)
+));
 
 
 // the application must be wrapped by BrowserRouter to activate Routing
