@@ -1,4 +1,4 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     // TODO migrate to redux for now we avoid ajax therefore we init this here temporarily
