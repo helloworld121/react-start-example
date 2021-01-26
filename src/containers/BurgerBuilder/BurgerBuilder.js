@@ -24,17 +24,8 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount() {
-        // console.log(this.props);
-        // TODO migrate to redux => for now avoid ajax-calls
-        // axios.get('/ingredients.json')
-        //     .then(response => {
-        //         // console.log('[BurgerBuilder] componentDidMount:', response.data)
-        //         this.setState({ingredients: response.data});
-        //     })
-        //     // if the "catch" block is missing, the "then" block will be executed even if an error occurred
-        //     .catch(error => {
-        //         this.setState({error: true});
-        //     });
+        console.log(this.props);
+        this.props.onInitIngredients();
     }
 
     updatePurchaseState(ingredients) {
@@ -85,7 +76,7 @@ class BurgerBuilder extends Component {
         let orderSummary = null;
 
         // if ingredients could not be loaded we display a message an not a spinner
-        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner/>;
+        let burger = this.props.error ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         if(this.props.ings) {
             burger = (
                 <Aux>
@@ -124,6 +115,7 @@ const mapStateToProps = (state) => {
     return {
         ings: state.ingredients,
         price: state.totalPrice,
+        error: state.error,
     };
 };
 
@@ -131,6 +123,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
         onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(actionCreators.initIngredients()),
     };
 }
 

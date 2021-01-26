@@ -32,7 +32,7 @@ export const setIngredients = (ingredients) => {
 export const fetchIngredientsFailed = () => {
     return {
         type: actionTypes.FETCH_INGREDIENTS_FAILED,
-        error: true,
+        // error: true,
     }
 };
 // this is the ASYNC-Action-Creator
