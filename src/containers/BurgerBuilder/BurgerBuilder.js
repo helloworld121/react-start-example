@@ -8,8 +8,8 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import axios from '../../axios-orders';
 import * as actionCreators from '../../store/actions/index';
+import axios from '../../axios-orders';
 
 
 
@@ -21,8 +21,6 @@ class BurgerBuilder extends Component {
     // }
     state = {
         purchasing: false,
-        loading: false,
-        error: false
     }
 
     componentDidMount() {
@@ -108,9 +106,6 @@ class BurgerBuilder extends Component {
                     purchasedCancelled={this.purchaseCancelHandler}
                     purchasedContinue={this.purchaseContinueHandler}/>
             );
-        }
-        if(this.state.loading) {
-            orderSummary = <Spinner/>;
         }
 
         return (

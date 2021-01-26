@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
+// thunk makes it possible interrupt a current action AND dispatch a new one
+// => this way we can execute async code
 import thunk from 'redux-thunk';
 
 
@@ -13,15 +15,15 @@ import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import reportWebVitals from './reportWebVitals';
 
 
-
+// redux-dev-tools extension to support browser-plugin
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // create store
 const store = createStore(
     burgerBuilderReducer,
     // Redux DevTools Extension
     // => setting up the redux store with middleware and enhancers
-    composeEnhancers(applyMiddleware(thunk)
-));
+    composeEnhancers(applyMiddleware(thunk))
+);
 
 
 // the application must be wrapped by BrowserRouter to activate Routing

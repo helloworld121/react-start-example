@@ -1,14 +1,9 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    // TODO migrate to redux for now we avoid ajax therefore we init this here temporarily
-    ingredients: {
-        salad: 0,
-        bacon: 0,
-        cheese: 0,
-        meat: 0,
-    },
+    ingredients: null,
     totalPrice: 4,
+    error: false, // this error will indicate if loading ingredients failed
 };
 
 const INGREDIENT_PRICES = {
