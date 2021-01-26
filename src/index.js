@@ -13,7 +13,11 @@ import reportWebVitals from './reportWebVitals';
 
 
 // create store
-const store = createStore(reducer);
+const store = createStore(
+    reducer,
+    // Redux DevTools Extension
+    // => For a basic Redux store we need to add
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 // the application must be wrapped by BrowserRouter to activate Routing
