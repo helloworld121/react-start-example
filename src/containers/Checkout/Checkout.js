@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
@@ -18,34 +18,42 @@ class Checkout extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <CheckoutSummary
-                    ingredients={this.props.ings}
-                    checkoutCancelled={this.checkoutCancelledHandler}
-                    checkoutContinued={this.checkoutContinuedHandler}/>
-                {/*<Route */}
-                {/*    path={this.props.match.path + '/contact-data'} */}
-                {/*    component={ContactData} />*/}
+        // if there are no ingredients loaded yet (they are loaded in the BurgerBuilder)
+        // => we redirect to the BurgerBuilder-component
+        let summary = <Redirect to={"/"}/>;
+        if(this.props.ings) { // if ingredients are available (if they are loaded)
+            summary = (
+                <div>
+                    <CheckoutSummary
+                        ingredients={this.props.ings}
+                        checkoutCancelled={this.checkoutCancelledHandler}
+                        checkoutContinued={this.checkoutContinuedHandler}/>
 
-                {/* to pass data using the Route => we can use the render method/parameter */}
+                    <Route
+                        path={this.props.match.path + '/contact-data'}
+                        component={ContactData} />
 
-                {/* NOW: after we use redux, we don't need the workaround 'render' to bypass parameter */}
-                <Route
-                    path={this.props.match.path + '/contact-data'}
-                    component={ContactData}/>
-                {/*
-                <Route
-                    path={this.props.match.path + '/contact-data'}
-                    render={() => (
-                        <ContactData
-                            ingredients={this.props.ings}
-                            price={this.props.price}
-                            {...this.props}/>
-                    )}/>
-                */}
-            </div>
-        );
+                    {/* to pass data using the Route => we can use the render method/parameter */}
+
+                    {/* NOW: after we use redux, we don't need the workaround 'render' to bypass parameter */}
+                    <Route
+                        path={this.props.match.path + '/contact-data'}
+                        component={ContactData}/>
+                    {/*
+                    <Route
+                        path={this.props.match.path + '/contact-data'}
+                        render={() => (
+                            <ContactData
+                                ingredients={this.props.ings}
+                                price={this.props.price}
+                                {...this.props}/>
+                        )}/>
+                    */}
+                </div>
+            );
+        }
+
+        return summary;
     }
 
 }
