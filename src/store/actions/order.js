@@ -33,7 +33,7 @@ export const purchaseBurger = (orderData) => {
         axios.post('/orders.json', orderData)
             .then(response => {
                 // we gonna dispatch to a SYNC-Action
-                dispatch(purchaseBurgerSuccess(response.data, orderData));
+                dispatch(purchaseBurgerSuccess(response.data.name, orderData));
                 // ATTENTION: props.history isn't available in here
                 // => therefore we can't redirect in here
                 // after successful passing data => redirect

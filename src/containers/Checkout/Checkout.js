@@ -29,16 +29,11 @@ class Checkout extends Component {
                         checkoutCancelled={this.checkoutCancelledHandler}
                         checkoutContinued={this.checkoutContinuedHandler}/>
 
-                    <Route
-                        path={this.props.match.path + '/contact-data'}
-                        component={ContactData} />
-
-                    {/* to pass data using the Route => we can use the render method/parameter */}
-
                     {/* NOW: after we use redux, we don't need the workaround 'render' to bypass parameter */}
                     <Route
                         path={this.props.match.path + '/contact-data'}
                         component={ContactData}/>
+                    {/* to pass data using the Route => we can use the render method/parameter */}
                     {/*
                     <Route
                         path={this.props.match.path + '/contact-data'}
@@ -60,7 +55,7 @@ class Checkout extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ings: state.ingredients,
+        ings: state.burgerBuilder.ingredients,
     }
 }
 

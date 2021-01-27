@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import {Provider} from 'react-redux';
-import {createStore, applyMiddleware, compose} from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 // thunk makes it possible interrupt a current action AND dispatch a new one
 // => this way we can execute async code
 import thunk from 'redux-thunk';
@@ -11,15 +11,23 @@ import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
+import orderReducer from './store/reducers/order';
 
 import reportWebVitals from './reportWebVitals';
 
+
+
+// combine reducers
+const rootReducer = combineReducers({
+    burgerBuilder: burgerBuilderReducer,
+    order: orderReducer,
+})
 
 // redux-dev-tools extension to support browser-plugin
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // create store
 const store = createStore(
-    burgerBuilderReducer,
+    rootReducer,
     // Redux DevTools Extension
     // => setting up the redux store with middleware and enhancers
     composeEnhancers(applyMiddleware(thunk))
