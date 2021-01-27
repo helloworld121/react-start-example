@@ -5,11 +5,12 @@ import {connect} from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 
+
 class Checkout extends Component {
 
     checkoutCancelledHandler = () => {
         // we have access to the router props
-        // => and in the thistory-prop we have the "goBack()" method
+        // => and in the history-prop we have the "goBack()" method
         this.props.history.goBack();
     }
 
@@ -21,9 +22,12 @@ class Checkout extends Component {
         // if there are no ingredients loaded yet (they are loaded in the BurgerBuilder)
         // => we redirect to the BurgerBuilder-component
         let summary = <Redirect to={"/"}/>;
+
         if(this.props.ings) { // if ingredients are available (if they are loaded)
+            const purchasedRedirect = this.props.purchased ? <Redirect to="/"/> : null;
             summary = (
                 <div>
+                    {purchasedRedirect}
                     <CheckoutSummary
                         ingredients={this.props.ings}
                         checkoutCancelled={this.checkoutCancelledHandler}
@@ -56,9 +60,9 @@ class Checkout extends Component {
 const mapStateToProps = (state) => {
     return {
         ings: state.burgerBuilder.ingredients,
-    }
-}
+        purchased: state.order.purchased,
+    };
+};
 
-// we don't dispatch in here for now, therefore we don't need it right now
 
 export default connect(mapStateToProps)(Checkout);

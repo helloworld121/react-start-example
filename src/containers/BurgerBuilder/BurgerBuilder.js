@@ -56,12 +56,14 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
+        // we need to start the process before we render the new component
+        // => this is necessary because we want to redirect if it is finished
+        this.props.onInitPurchase();
+
         // everything that gets loaded via a route gets that special props
         // we push a new page on the stack of pages
         // this.props.history.push('/checkout');
         this.props.history.push('/checkout');
-
-        //alert('you continue!');
     }
 
     render() {
@@ -124,6 +126,7 @@ const mapDispatchToProps = (dispatch) => {
         onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
         onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
         onInitIngredients: () => dispatch(actionCreators.initIngredients()),
+        onInitPurchase: () => dispatch(actionCreators.purchaseInit()),
     };
 }
 
