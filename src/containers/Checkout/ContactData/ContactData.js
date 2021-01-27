@@ -83,6 +83,7 @@ class ContactData extends Component {
         this.props.onOrderBurger(order);
     }
 
+    // TODO refactor => see Auth
     checkValidity(value, rules) {
         // check if rules is defined
         if(!rules) {
@@ -103,9 +104,20 @@ class ContactData extends Component {
             isValid = value.length <= rules.maxLength && isValid;
         }
 
+        if (rules.isEmail) {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            isValid = pattern.test(value) && isValid
+        }
+
+        if (rules.isNumeric) {
+            const pattern = /^\d+$/;
+            isValid = pattern.test(value) && isValid
+        }
+
         return isValid;
     }
 
+    // TODO refactor => see Auth
     // the event on its own won't be enough
     // => we need to identify the targeted object to set its "value"
     inputChangedHandler = (event, inputIdentifier) => {
@@ -138,6 +150,7 @@ class ContactData extends Component {
         this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
     }
 
+    // TODO refactor => see Auth
     render () {
         // convert the form-object into an array
         // => so it is possible to loop over it
