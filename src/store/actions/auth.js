@@ -1,3 +1,6 @@
+import axios from 'axios';
+
+import config from '../../environment.json';
 import * as actionTypes from './actionTypes';
 
 export const authStart = () => {
@@ -22,7 +25,22 @@ export const authFail = (error) => {
 
 export const auth = (email, password) => {
     return (dispatch) => {
-        // TODO async auth-call
         dispatch(authStart());
+
+        const authData = {
+            email: email,
+            password: password,
+            returnSecureToken: true,
+        };
+        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + config.firebaseApiKey, authData)
+            .then((response) => {
+                console.log(response);
+                dispatch(authSuccess(response.data));
+            })
+            .catch((error) => {
+                console.log(error);
+                dispatch(authFail(error));
+            });
+        //
     };
 };
