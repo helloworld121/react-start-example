@@ -12,6 +12,7 @@ import './index.css';
 import App from './App';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -21,6 +22,7 @@ import reportWebVitals from './reportWebVitals';
 const rootReducer = combineReducers({
     burgerBuilder: burgerBuilderReducer,
     order: orderReducer,
+    auth: authReducer,
 })
 
 // redux-dev-tools extension to support browser-plugin
