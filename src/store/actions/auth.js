@@ -35,10 +35,10 @@ export const auth = (email, password, isSignup) => {
         };
 
         //
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + config.firebaseApiKey;
+        let url = config.url4SignUp + config.firebaseApiKey;
         if(!isSignup) {
             // authenticating url
-            url ='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + config.firebaseApiKey;
+            url =config.url4SignIn + config.firebaseApiKey;
         }
 
         axios.post(url, authData)
@@ -47,8 +47,9 @@ export const auth = (email, password, isSignup) => {
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
             })
             .catch((error) => {
-                console.log(error);
-                dispatch(authFail(error));
+                // console.log(error);
+                // we just want the error-data-object
+                dispatch(authFail(error.response.data.error));
             });
         //
     };

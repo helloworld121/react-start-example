@@ -1,4 +1,6 @@
 {
   "url": "ADD THE URL TO THE DATABASE IN HERE",
-  "firebaseApiKey": "API KEY READ FROM FIREBASE CONSOLE"
+  "url4SignUp": "FIREBASE REST-URL FOR SIGN UP: https://firebase.google.com/docs/reference/rest/auth#section-create-email-password",
+  "url4SignIn": "FIREBASE REST-URL FOR SIGN IN: https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password",
+  "firebaseApiKey": "API KEY READ FROM FIREBASE CONSOLE: https://console.firebase.google.com/project/%PROJECT-NAME%/settings/general"
 }
