@@ -23,7 +23,8 @@ class Auth extends Component {
                 validation: {required: true, minLength: 6},
                 valid: false, touched: false
             },
-        }
+        },
+        isSignup: true,
     };
 
     // TODO refactor => see ContactData
@@ -85,8 +86,15 @@ class Auth extends Component {
 
         this.props.onAuth(
             this.state.controls.email.value,
-            this.state.controls.password.value);
+            this.state.controls.password.value,
+            this.state.isSignup);
     }
+
+    switchAuthModeHandler = () => {
+        this.setState(prevState => {
+            return {isSignup: !prevState.isSignup};
+        });
+    };
 
     // TODO refactor => see ContactData
     render() {
@@ -120,6 +128,9 @@ class Auth extends Component {
                     {form}
                     <Button btnType="Success">SUBMIT</Button>
                 </form>
+                <Button
+                    clicked={this.switchAuthModeHandler}
+                    btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
             </div>
         );
     }
@@ -128,7 +139,7 @@ class Auth extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAuth: (email, password) => dispatch(actionCreators.auth(email, password)),
+        onAuth: (email, password, isSignup) => dispatch(actionCreators.auth(email, password, isSignup)),
     };
 };
 
