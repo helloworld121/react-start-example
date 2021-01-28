@@ -24,6 +24,22 @@ export const authFail = (error) => {
     };
 };
 
+export const logout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT,
+    };
+};
+
+// the token expires after a certain time.
+// => therefore we need to check if the token is still valid, to maybe log the user out
+export const checkAuthTmeout = (expirationTime) => {
+    return (dispatch) => {
+        setTimeout(() => {
+            dispatch(logout());
+        }, expirationTime * 1000);
+    };
+};
+
 export const auth = (email, password, isSignup) => {
     return (dispatch) => {
         dispatch(authStart());
@@ -45,6 +61,9 @@ export const auth = (email, password, isSignup) => {
             .then((response) => {
                 console.log(response);
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
+
+                // we also want to execute some async code to log the user out if the token is invalid
+                dispatch(checkAuthTmeout(response.data.expiresIn));
             })
             .catch((error) => {
                 // console.log(error);

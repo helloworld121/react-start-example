@@ -136,7 +136,7 @@ class Auth extends Component {
 
         return(
             <div className={classes.Auth}>
-                {/* TODO: maybe translate error-message => also in the action AND do some styling */}
+                {/* TODO: maybe translate error-message => also possible in the action AND do some styling */}
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
