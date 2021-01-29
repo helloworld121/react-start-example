@@ -56,6 +56,7 @@ class BurgerBuilder extends Component {
             // otherwise we want to redirect to login - page
             // => the PROBLEM is, that after authenticating
             //    the user gets redirected back to BurgerBuilder and loses the Burger
+            this.props.onSetAuthRedirectPath("/checkout");
             this.props.history.push("/auth");
         }
     }
@@ -137,6 +138,7 @@ const mapDispatchToProps = (dispatch) => {
         onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
         onInitIngredients: () => dispatch(actionCreators.initIngredients()),
         onInitPurchase: () => dispatch(actionCreators.purchaseInit()),
+        onSetAuthRedirectPath: (path) => dispatch(actionCreators.setAuthRedirectPath(path)),
     };
 }
 

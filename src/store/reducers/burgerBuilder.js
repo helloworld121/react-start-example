@@ -5,6 +5,7 @@ const initialState = {
     ingredients: null,
     totalPrice: 4,
     error: false, // this error will indicate if loading ingredients failed
+    building: false, // usecase => if unauthenticated user builds a burger he needs to authenticate himself => after redirect from login to BurgerBuilder we want to keep the current burger
 };
 
 const INGREDIENT_PRICES = {
@@ -20,6 +21,7 @@ const addIngredient = (state, action) => {
     const updatedState = {
         ingredients: updatedIngredients,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+        building: true,
     };
     return updateObject(state, updatedState);
     /*
@@ -42,6 +44,7 @@ const removeIngredient = (state, action) => {
             [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
         },
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+        building: true,
     };
 };
 
@@ -51,6 +54,7 @@ const setIngredient = (state, action) => {
         ingredients: action.ingredients,
         totalPrice: 4,
         error: false,
+        building: false,
     };
 };
 

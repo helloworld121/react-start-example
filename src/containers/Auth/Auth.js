@@ -29,6 +29,14 @@ class Auth extends Component {
         isSignup: true,
     };
 
+    componentDidMount() {
+        // we want to dispatch the AuthRedirectPath if we are not building a burger
+        if(!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
+            // this means we are trying to redirect to checkout
+            this.props.onSetAuthRedirectPath();
+        }
+    }
+
     // TODO refactor => see ContactData
     checkValidity(value, rules) {
         // check if rules is defined
@@ -138,7 +146,11 @@ class Auth extends Component {
         // if user is authenticated we want to redirect him => and we do this declarative
         let authRedirect = null;
         if(this.props.isAuthenticated) {
-            authRedirect = <Redirect to="/"/>;
+            // there are multiple ways on handling the redirect
+            // a) store the redirect url in the store and replace it dynamically
+            // b) pass the url as a query-parameter
+            // c) the most static way would be to add a condition and decide where to redirect to
+            authRedirect = <Redirect to={this.props.authRedirectPath} />;
         }
 
         return(
@@ -163,12 +175,17 @@ const mapStateToProps = (state) => {
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
+        buildingBurger: state.burgerBuilder.building,
+        authRedirectPath: state.auth.authRedirectPath,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onAuth: (email, password, isSignup) => dispatch(actionCreators.auth(email, password, isSignup)),
+        // we can hardcode the path in here
+        // because always if we call this action we want to set the path to its initial value
+        onSetAuthRedirectPath: () => dispatch(actionCreators.setAuthRedirectPath("/")),
     };
 };
 
