@@ -3,7 +3,19 @@
 # store date
 * to store data we are using Firebase: https://firebase.google.com/
     * the selected database type should be **Realtime Database**
-    * to enable public access we change rules to **read: true** and **write: true**
+    * to configure protected access we are using the following **rules**:
+      `{
+        "rules": {
+          "ingredients": {
+            ".read": "true",
+            ".write": "true",
+          },
+          "orders": {
+            ".read": "auth != null",
+            ".write": "auth != null"
+          }
+        }
+      }`
 * all necessary configurations should be stored in a file **environment.json** the file **environment-template.json** could be used as a template
 
 
