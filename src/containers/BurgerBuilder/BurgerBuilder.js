@@ -49,7 +49,15 @@ class BurgerBuilder extends Component {
     //    and "setState" might not be available or a different object
     // ES6 Arrow function will contain the context of "this"
     purchaseHandler = () => {
-        this.setState({purchasing: true});
+        if(this.props.isAuthenticated) {
+            // we only want to set the state we the user is logged in
+            this.setState({purchasing: true});
+        } else {
+            // otherwise we want to redirect to login - page
+            // => the PROBLEM is, that after authenticating
+            //    the user gets redirected back to BurgerBuilder and loses the Burger
+            this.props.history.push("/auth");
+        }
     }
     purchaseCancelHandler = () => {
         this.setState({purchasing: false});
@@ -89,6 +97,7 @@ class BurgerBuilder extends Component {
                         disabled={disableInfo}
                         purchasable={this.updatePurchaseState(this.props.ings)}
                         ordered={this.purchaseHandler}
+                        isAuth={this.props.isAuthenticated}
                         price={this.props.price}/>
                 </Aux>
             );
@@ -118,6 +127,7 @@ const mapStateToProps = (state) => {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
         error: state.burgerBuilder.error,
+        isAuthenticated: state.auth.token !== null,
     };
 };
 
