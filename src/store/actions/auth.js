@@ -25,6 +25,11 @@ export const authFail = (error) => {
 };
 
 export const logout = () => {
+    // if the user execute logout we also need to remove authentication information from localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('userId');
+
     return {
         type: actionTypes.AUTH_LOGOUT,
     };
@@ -60,6 +65,15 @@ export const auth = (email, password, isSignup) => {
         axios.post(url, authData)
             .then((response) => {
                 console.log(response);
+
+                // we also want to persist the authentication-state of the user
+                // this could also be done in authSuccess => but it makes sense to also use the expires-time
+                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+                localStorage.setItem('token', response.data.idToken);
+                localStorage.setItem('expirationDate', expirationDate);
+                localStorage.setItem('userId', response.data.localId);
+
+
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
 
                 // we also want to execute some async code to log the user out if the token is invalid
@@ -78,5 +92,27 @@ export const setAuthRedirectPath = (path) => {
     return {
         type: actionTypes.SET_AUTH_REDIRECT_PATH,
         path: path,
-    }
+    };
+};
+
+// this method is used to load authentication information from localStorage
+export const authCheckState = () => {
+    // we need dispatch, because we need to dispatch multiple actions
+    return (dispatch) => {
+        const token = localStorage.getItem('token');
+        if(!token) {
+            // if there is no token, there is no action we need to execute
+            dispatch(logout());
+        } else {
+            // we retrieve a string from localStorage, but with "new Date" we can convert it to a Date
+            const expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if(expirationDate <= new Date()) {
+                dispatch(logout());
+            } else {
+                const userId = localStorage.getItem('userId');
+                dispatch(authSuccess(token, userId));
+                dispatch( checkAuthTmeout( (expirationDate.getTime() - new Date().getTime()) / 1000 ) );
+            }
+        }
+    };
 };
