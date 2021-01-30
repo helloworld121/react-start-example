@@ -66,7 +66,7 @@ export const auth = (email, password, isSignup) => {
 
         axios.post(url, authData)
             .then((response) => {
-                console.log(response);
+                //console.log(response);
 
                 // we also want to persist the authentication-state of the user
                 // this could also be done in authSuccess => but it makes sense to also use the expires-time

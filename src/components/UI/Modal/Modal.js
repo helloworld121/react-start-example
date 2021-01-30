@@ -6,10 +6,10 @@ import Backdrop from '../Backdrop/Backdrop';
 
 class Modal extends Component {
 
-    // we want to see when compoents gets updated
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('[Modal] componentDidUpdate');
-    }
+    // we want to see when components gets updated
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     console.log('[Modal] componentDidUpdate');
+    // }
 
     // alternatively to switch to class-based component to implement a life-cycle-method
     // we can wrap the exported component (function-based) with react-memo

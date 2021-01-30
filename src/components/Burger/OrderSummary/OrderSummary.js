@@ -10,9 +10,9 @@ class OrderSummary extends Component {
 
     // after adding diese method with log-entry
     // we will see, that the components gets updated even if we don't show it
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('[OrderSummary] componentDidUpdate');
-    }
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     console.log('[OrderSummary] componentDidUpdate');
+    // }
 
     render() {
         const ingredientSummary = Object
