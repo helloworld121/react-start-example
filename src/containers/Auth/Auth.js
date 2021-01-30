@@ -7,7 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 import * as actionCreators from '../../store/actions/index';
-import {updateObject} from '../../shared/utility';
+import {updateObject, checkValidity} from '../../shared/utility';
 
 class Auth extends Component {
     state = {
@@ -38,39 +38,6 @@ class Auth extends Component {
         }
     }
 
-    // TODO refactor => see ContactData
-    checkValidity(value, rules) {
-        // check if rules is defined
-        if(!rules) {
-            return true;
-        }
-
-        let isValid = true;
-
-        if(rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if(rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if(rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        if (rules.isEmail) {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        if (rules.isNumeric) {
-            const pattern = /^\d+$/;
-            isValid = pattern.test(value) && isValid
-        }
-
-        return isValid;
-    }
 
     // TODO refactor => see ContactData
     inputChangedHandler = (event, controlName) => {
@@ -95,7 +62,7 @@ class Auth extends Component {
                 // set the value
                 value: event.target.value,
                 // update validity => due to the event
-                valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
                 // and set touched
                 touched: true
             })
