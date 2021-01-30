@@ -14,6 +14,11 @@ configure({ adapter: new ReactSeventeenAdapter() });
 // b) the test-function
 describe('<NavigationItems />', () => {
 
+    let wrapper;
+    beforeEach(() => {
+        wrapper =  shallow(<NavigationItems/>);
+    });
+
     // jest function, that describes on specific test, it also holds two arguments
     // a) a description => that completes a sentence starting with "it"
     // b) a testing-function describing the actual test
@@ -22,7 +27,7 @@ describe('<NavigationItems />', () => {
         // to render a certain component we need enzyme
         // "shallow" => renders a component with all its content BUT the component is not deeply rendered
         //           => the NESTED component are rendered as PLACEHOLDERS => their content is not rendered
-        const wrapper = shallow(<NavigationItems/>);
+        //const wrapper = shallow(<NavigationItems/>);
 
         // expect is an jest function to write expectations
         // => "find" is a function provided by enzyme
@@ -30,4 +35,12 @@ describe('<NavigationItems />', () => {
         expect(wrapper.find(NavigationItem)).toHaveLength(2);
     });
 
+    it('should render three <NavigationItems /> elements if authenticated', () => {
+        //const wrapper = shallow(<NavigationItems isAuthenticated/>);
+
+        // we can use setProps an enzyme function to update props
+        wrapper.setProps({isAuthenticated: true});
+
+        expect(wrapper.find(NavigationItem)).toHaveLength(3);
+    });
 });
