@@ -12,7 +12,8 @@
           },
           "orders": {
             ".read": "auth != null",
-            ".write": "auth != null"
+            ".write": "auth != null",
+            ".indexOn": ["userId"],
           }
         }
       }`

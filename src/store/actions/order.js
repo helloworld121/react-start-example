@@ -74,12 +74,14 @@ export const fetchOrdersStart = () => {
     };
 };
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
     return (dispatch) => {
         // before ajax call we want to set the loading state
         dispatch(fetchOrdersStart());
 
-        axios.get('/orders.json?auth=' + token)
+        // we only want to receive orders created by the current user
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+        axios.get('/orders.json' + queryParams)
             .then( response => {
                 // console.log(response.data);
                 const fetchedOrders = [];
