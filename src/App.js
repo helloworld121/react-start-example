@@ -44,6 +44,8 @@ class App extends Component {
                     <Route path="/checkout" component={Checkout}/>
                     <Route path="/orders" component={Orders}/>
                     <Route path="/logout" component={Logout}/>
+                    {/*we keep the auth-route in here to make the redirect on the Auth-page work*/}
+                    <Route path="/auth" component={Auth}/>
                     <Route path="/" exact component={BurgerBuilder}/>
                     {/*all not matching (unknown) requested routes should be redirected*/}
                     <Redirect to="/" />
