@@ -38,6 +38,8 @@ export const logout = () => {
 // the token expires after a certain time.
 // => therefore we need to check if the token is still valid, to maybe log the user out
 export const checkAuthTmeout = (expirationTime) => {
+    // it is also possible to store the refreshToken and exchange it for a new idToken
+    // => this way it is possible to keep the user authenticated
     return (dispatch) => {
         setTimeout(() => {
             dispatch(logout());

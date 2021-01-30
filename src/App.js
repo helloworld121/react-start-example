@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route, Switch, withRouter} from 'react-router-dom';
+import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
@@ -18,32 +18,55 @@ class App extends Component {
     }
 
     render() {
+        // having one route "/"
+        // there are two possible ways to make route under "/" not render on every url
+        //     => one way is using "exact" which will check for an exact match
+        //     => the other way is using "<Switch>" but in this case the order will matter
+        //     => because the first match will be rendered
+        // or we use exact
+        //
+        // the example below display both solutions
+
+        // GUARDS: define which routes are for which users available
+        // routes for UNAUTHENTICATED users
+        let routes = (
+            <Switch>
+                <Route path="/auth" component={Auth}/>
+                <Route path="/" exact component={BurgerBuilder}/>
+                {/*all not matching (unknown) requested routes should be redirected*/}
+                <Redirect to="/" />
+            </Switch>
+        );
+        // routes for AUTHENTICATED users
+        if(this.props.isAuthenticated) {
+            routes = (
+                <Switch>
+                    <Route path="/checkout" component={Checkout}/>
+                    <Route path="/orders" component={Orders}/>
+                    <Route path="/logout" component={Logout}/>
+                    <Route path="/" exact component={BurgerBuilder}/>
+                    {/*all not matching (unknown) requested routes should be redirected*/}
+                    <Redirect to="/" />
+                </Switch>
+            );
+        }
+
         return (
             <div>
                 <Layout>
-                    {/*
-                        having one route "/"
-                        there are two possible ways to make route under "/" not render on every url
-                        => one way is using "exact" which will check for an exact match
-                        => the other way is using "<Switch>" but in this case the order will matter
-                           => because the first match will be rendered
-                              or we use exact
-
-                        the example below display both solutions
-                    */}
-                    <Switch>
-                        <Route path="/checkout" component={Checkout}/>
-                        <Route path="/orders" component={Orders}/>
-                        <Route path="/auth" component={Auth}/>
-                        <Route path="/logout" component={Logout}/>
-                        <Route path="/" exact component={BurgerBuilder}/>
-                    </Switch>
+                    {routes}
                 </Layout>
             </div>
         );
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        isAuthenticated: state.auth.token !== null,
+    }
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -55,4 +78,4 @@ const mapDispatchToProps = (dispatch) => {
 // in previous versions of react-router the withRouter was necessary, now it doesn't seem so...
 // => withRouter => if a component was loaded with routing but the component doesn't receive the route props
 //                  AND therefore it don't get displayed
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
