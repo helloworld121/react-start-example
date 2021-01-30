@@ -9,6 +9,7 @@ import Input from '../../../components/UI/Input/Input';
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actionCreators from '../../../store/actions/index';
+import {updateObject} from '../../../shared/utility';
 
 class ContactData extends Component {
 
@@ -32,7 +33,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {type: 'text', placeholder: 'ZIP Code'},
                 value: '',
-                validation: {required: true, minLength: 5, maxLength: 5},
+                validation: {required: true, minLength: 5, maxLength: 5, isNumeric: true},
                 valid: false, touched: false
             },
             country: {
@@ -46,7 +47,7 @@ class ContactData extends Component {
                 elementType: 'email',
                 elementConfig: {type: 'text', placeholder: 'Your E-Mail'},
                 value: '',
-                validation: {required: true},
+                validation: {required: true, isEmail: true},
                 valid: false, touched: false
             },
             deliveryMethod: {
@@ -122,28 +123,36 @@ class ContactData extends Component {
     // the event on its own won't be enough
     // => we need to identify the targeted object to set its "value"
     inputChangedHandler = (event, inputIdentifier) => {
+        /*
         // console.log(event.target.value);
         // attention we need to set the state in an immutable way
         // ATTENTION THE SPREAD OPERATOR WON'T CLONE DEEPLY
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        };
+        const updatedOrderForm = {...this.state.orderForm};
+
         // because we just want to update the nested field "value"
         // it will be enough if we clone just the formElement
         // => if we want to change something more deeply we need to take care of those nested objects
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        };
+        const updatedFormElement = {...updatedOrderForm[inputIdentifier]};
         updatedFormElement.value = event.target.value;
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedFormElement.touched = true;
+
         // now we can update our cloned form
         updatedOrderForm[inputIdentifier] = updatedFormElement;
+        */
 
-        // console.log(updateFormElement);
+        // refactor to use updateObject
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            touched: true
+        });
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        });
 
         let formIsValid = true;
-        for(let inputIdentifier in updatedOrderForm) {
+        for (let inputIdentifier in updatedOrderForm) {
             formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
         }
 

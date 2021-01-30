@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 import * as actionCreators from '../../store/actions/index';
+import {updateObject} from '../../shared/utility';
 
 class Auth extends Component {
     state = {
@@ -73,6 +74,7 @@ class Auth extends Component {
 
     // TODO refactor => see ContactData
     inputChangedHandler = (event, controlName) => {
+        /*
         const updatedControls = {
             ...this.state.controls,
             // set the changed field
@@ -87,6 +89,17 @@ class Auth extends Component {
                 touched: true,
             }
         };
+        */
+        const updatedControls = updateObject(this.state.controls, {
+            [controlName]: updateObject(this.state.controls[controlName], {
+                // set the value
+                value: event.target.value,
+                // update validity => due to the event
+                valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+                // and set touched
+                touched: true
+            })
+        });
         this.setState({controls: updatedControls})
     };
 
