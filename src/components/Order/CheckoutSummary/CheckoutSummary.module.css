@@ -4,8 +4,9 @@
     margin: auto;
 }
 
-@media (min-width: 600px) {
-    .CheckoutSummary {
-        width: 500px;
-    }
-}
+/* on small devices the 80% make the burger not positioned in the center */
+/*@media (min-width: 600px) {*/
+/*    .CheckoutSummary {*/
+/*        width: 500px;*/
+/*    }*/
+/*}*/
