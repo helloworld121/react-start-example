@@ -8,7 +8,10 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 configure({ adapter: new ReactSeventeenAdapter() });
 
-
+// official documentation:
+// jest: https://jestjs.io/docs/en/getting-started
+// enzyme: https://enzymejs.github.io/enzyme/docs/api/
+//
 // jest provides "describe" which takes two arguments
 // a) the description of the test-bundle this file holds
 // b) the test-function
@@ -42,5 +45,12 @@ describe('<NavigationItems />', () => {
         wrapper.setProps({isAuthenticated: true});
 
         expect(wrapper.find(NavigationItem)).toHaveLength(3);
+    });
+
+    // this test checks if a specific element exists
+    it('should render the Logout-<NavigationItem>', () => {
+        // each test runs independent of the others, therefore we need to setProps another time
+        wrapper.setProps({isAuthenticated: true});
+        expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)).toEqual(true);
     });
 });
