@@ -12,8 +12,9 @@ import * as actionCreators from '../../store/actions/index';
 import axios from '../../axios-orders';
 
 
-
-class BurgerBuilder extends Component {
+// adding export to class we can easily write tests, because we don't need the redux-store
+// => export the class we STRIP OUT the CONNECTION to REDUX
+export class BurgerBuilder extends Component {
 
     // constructor(props) {
     //     super(props);
