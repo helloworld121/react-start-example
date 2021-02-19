@@ -12,7 +12,7 @@ const asyncComponent = (importComponent) => {
 
         componentDidMount () {
             // here is the function executed
-            // this function uses the DYNAMIC IMPORT SYNTAX
+            // this function uses the **DYNAMIC IMPORT SYNTAX**
             // => this gives us a promise with the component we want to load
             //    AND this component will then be rendered
             importComponent()

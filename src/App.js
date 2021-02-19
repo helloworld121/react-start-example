@@ -9,7 +9,7 @@ import Logout from './containers/Auth/Logout/Logout';
 import * as actionCreators from './store/actions/index';
 
 
-// ==> USING asyncComponent to load COMPONENTS ASYNC
+// ==> USING asyncComponent to load COMPONENTS ASYNC => using dynamic import
 // import Checkout from './containers/Checkout/Checkout';
 const asyncCheckout = asyncComponent(() => {return import('./containers/Checkout/Checkout')});
 //import Orders from './containers/Orders/Orders';
