@@ -7,7 +7,7 @@ import * as actionTypes from '../actions/actionTypes';
 //   => generator functions are next javascript functions
 //   => that can be paused
 //   => for example to wait for async-code to finish
-function* logout(action) {
+export function* logoutSaga(action) {
     // each step must be prefixed with yield => and than it will wait for it to finish
     yield localStorage.removeItem('token');
     yield localStorage.removeItem('expirationDate');

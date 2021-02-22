@@ -6,13 +6,14 @@ import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 // thunk makes it possible interrupt a current action AND dispatch a new one
 // => this way we can execute async code
 import thunk from 'redux-thunk';
-
+import createSagaMiddleware from 'redux-saga';
 
 import './index.css';
 import App from './App';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
+import { logoutSaga } from './store/sagas/auth';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -25,6 +26,9 @@ const rootReducer = combineReducers({
     auth: authReducer,
 })
 
+const sagaMiddleware = createSagaMiddleware();
+
+
 // redux-dev-tools extension to support browser-plugin
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // create store
@@ -32,9 +36,10 @@ const store = createStore(
     rootReducer,
     // Redux DevTools Extension
     // => setting up the redux store with middleware and enhancers
-    composeEnhancers(applyMiddleware(thunk))
+    composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
 );
 
+sagaMiddleware.run(logoutSaga);
 
 // the application must be wrapped by BrowserRouter to activate Routing
 const app = (
