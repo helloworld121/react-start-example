@@ -1,5 +1,8 @@
-import {put} from 'redux-saga/effects'
-import * as actionTypes from '../actions/actionTypes';
+import {put, delay} from 'redux-saga/effects'
+import * as actionCreators from '../actions/index';
+import {logout} from "../actions/index";
+
+
 
 // clear actionCreator
 // sagas are relacted to functions
@@ -13,7 +16,12 @@ export function* logoutSaga(action) {
     yield localStorage.removeItem('expirationDate');
     yield localStorage.removeItem('userId');
     // put will dispatch a new action
-    yield put({
-        type: actionTypes.AUTH_LOGOUT,
-    });
+    yield put(actionCreators.logoutSucceed());
+}
+
+export function* checkAuthTimeoutSaga(action) {
+    // it is also possible to store the refreshToken and exchange it for a new idToken
+    // => this way it is possible to keep the user authenticated
+    yield delay(action.expirationTime);
+    yield put(actionCreators.logout());
 }

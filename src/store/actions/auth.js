@@ -35,16 +35,29 @@ export const logout = () => {
     };
 };
 
+export const logoutSucceed = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT,
+    };
+}
+
 // the token expires after a certain time.
 // => therefore we need to check if the token is still valid, to maybe log the user out
 export const checkAuthTmeout = (expirationTime) => {
+    // this will be done by a saga
     // it is also possible to store the refreshToken and exchange it for a new idToken
     // => this way it is possible to keep the user authenticated
-    return (dispatch) => {
-        setTimeout(() => {
-            dispatch(logout());
-        }, expirationTime * 1000);
-    };
+    // return (dispatch) => {
+    //     setTimeout(() => {
+    //         dispatch(logout());
+    //     }, expirationTime * 1000);
+    // };
+
+    // dispatch action, that leeds to saga
+    return {
+        type: actionTypes.AUTH_CHECK_TIMEOUT,
+        expirationTime: expirationTime,
+    }
 };
 
 export const auth = (email, password, isSignup) => {
