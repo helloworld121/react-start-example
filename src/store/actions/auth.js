@@ -43,7 +43,7 @@ export const logoutSucceed = () => {
 
 // the token expires after a certain time.
 // => therefore we need to check if the token is still valid, to maybe log the user out
-export const checkAuthTmeout = (expirationTime) => {
+export const checkAuthTimeout = (expirationTime) => {
     // this will be done by a saga
     // it is also possible to store the refreshToken and exchange it for a new idToken
     // => this way it is possible to keep the user authenticated
@@ -61,46 +61,12 @@ export const checkAuthTmeout = (expirationTime) => {
 };
 
 export const auth = (email, password, isSignup) => {
-    return (dispatch) => {
-        dispatch(authStart());
-
-        const authData = {
-            email: email,
-            password: password,
-            returnSecureToken: true,
-        };
-
-        //
-        let url = config.url4SignUp + config.firebaseApiKey;
-        if(!isSignup) {
-            // authenticating url
-            url =config.url4SignIn + config.firebaseApiKey;
-        }
-
-        axios.post(url, authData)
-            .then((response) => {
-                //console.log(response);
-
-                // we also want to persist the authentication-state of the user
-                // this could also be done in authSuccess => but it makes sense to also use the expires-time
-                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-                localStorage.setItem('token', response.data.idToken);
-                localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('userId', response.data.localId);
-
-
-                dispatch(authSuccess(response.data.idToken, response.data.localId));
-
-                // we also want to execute some async code to log the user out if the token is invalid
-                dispatch(checkAuthTmeout(response.data.expiresIn));
-            })
-            .catch((error) => {
-                // console.log(error);
-                // we just want the error-data-object
-                dispatch(authFail(error.response.data.error));
-            });
-        //
-    };
+    return {
+        type: actionTypes.AUTH_USER,
+        email: email,
+        password: password,
+        isSignup: isSignup,
+    }
 };
 
 export const setAuthRedirectPath = (path) => {
@@ -126,7 +92,7 @@ export const authCheckState = () => {
             } else {
                 const userId = localStorage.getItem('userId');
                 dispatch(authSuccess(token, userId));
-                dispatch( checkAuthTmeout( (expirationDate.getTime() - new Date().getTime()) / 1000 ) );
+                dispatch( checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000 ) );
             }
         }
     };
