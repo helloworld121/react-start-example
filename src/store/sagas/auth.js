@@ -2,7 +2,7 @@ import {put, delay} from 'redux-saga/effects'
 import * as actionCreators from '../actions/index';
 import config from "../../environment.json";
 import axios from "axios";
-import {authSuccess, checkAuthTimeout, logout} from "../actions/index";
+
 
 
 

@@ -1,6 +1,4 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
-
 
 // these are our action-creators for burgerBuilder
 
@@ -35,19 +33,8 @@ export const fetchIngredientsFailed = () => {
         // error: true,
     }
 };
-// this is the ASYNC-Action-Creator
-// => it MUST dispatch a SYNC-Action-Creator
 export const initIngredients = () => {
-    // this dispatch function is available due to redux-thunk
-    // => thunk will interrupt the current action AND makes it possible to dispatch a new one
-    return (dispatch) => {
-        axios.get('/ingredients.json')
-            .then(response => {
-                dispatch(setIngredients(response.data));
-            })
-            // if the "catch" block is missing, the "then" block will be executed even if an error occurred
-            .catch(error => {
-                dispatch(fetchIngredientsFailed());
-            });
-    };
+    return {
+        type: actionTypes.INIT_INGREDIENTS,
+    }
 };

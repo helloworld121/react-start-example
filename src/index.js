@@ -13,7 +13,7 @@ import App from './App';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
-import { watchAuth } from './store/sagas/index';
+import { watchAuth, watchBurgerBuilder } from './store/sagas/index';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -40,6 +40,7 @@ const store = createStore(
 );
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBurgerBuilder);
 
 // the application must be wrapped by BrowserRouter to activate Routing
 const app = (
