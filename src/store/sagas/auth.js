@@ -2,6 +2,7 @@ import {put, delay} from 'redux-saga/effects'
 import * as actionCreators from '../actions/index';
 import config from "../../environment.json";
 import axios from "axios";
+import {authSuccess, checkAuthTimeout, logout} from "../actions/index";
 
 
 
@@ -61,4 +62,24 @@ export function* authUserSaga(action) {
         yield put(actionCreators.authFail(error.response.data.error));
     }
 
+}
+
+export function* authCheckStateSaga(action) {
+    const token = yield localStorage.getItem('token');
+    if(!token) {
+        // if there is no token, there is no action we need to execute
+        // dispatch action
+        yield put(actionCreators.logout());
+    } else {
+        // we retrieve a string from localStorage, but with "new Date" we can convert it to a Date
+        const expirationDate = yield new Date(localStorage.getItem('expirationDate'));
+        if(expirationDate <= new Date()) {
+            // dispatch(logout());
+            yield put(actionCreators.logout());
+        } else {
+            const userId = yield localStorage.getItem('userId');
+            yield put(actionCreators.authSuccess(token, userId));
+            yield put(actionCreators.checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000 ) );
+        }
+    }
 }

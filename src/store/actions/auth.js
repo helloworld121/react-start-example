@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-import config from '../../environment.json';
 import * as actionTypes from './actionTypes';
 
 export const authStart = () => {
@@ -78,22 +75,7 @@ export const setAuthRedirectPath = (path) => {
 
 // this method is used to load authentication information from localStorage
 export const authCheckState = () => {
-    // we need dispatch, because we need to dispatch multiple actions
-    return (dispatch) => {
-        const token = localStorage.getItem('token');
-        if(!token) {
-            // if there is no token, there is no action we need to execute
-            dispatch(logout());
-        } else {
-            // we retrieve a string from localStorage, but with "new Date" we can convert it to a Date
-            const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if(expirationDate <= new Date()) {
-                dispatch(logout());
-            } else {
-                const userId = localStorage.getItem('userId');
-                dispatch(authSuccess(token, userId));
-                dispatch( checkAuthTimeout( (expirationDate.getTime() - new Date().getTime()) / 1000 ) );
-            }
-        }
-    };
+    return {
+        type: actionTypes.AUTH_CHECK_STATE,
+    }
 };
