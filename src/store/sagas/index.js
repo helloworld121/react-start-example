@@ -1,4 +1,4 @@
-import {takeEvery} from 'redux-saga/effects';
+import {takeEvery, all, takeLatest} from 'redux-saga/effects';
 
 import * as actionTypes from '../actions/actionTypes';
 import {logoutSaga, checkAuthTimeoutSaga, authUserSaga, authCheckStateSaga} from './auth';
@@ -7,10 +7,17 @@ import {purchaseBurgerSaga, fetchOrdersSaga} from './order';
 
 export function* watchAuth() {
     // this will register a listener, that executes the function when ever the action appears
-    yield takeEvery(actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga);
-    yield takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga);
-    yield takeEvery(actionTypes.AUTH_USER, authUserSaga);
-    yield takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga);
+    // "all" will execute calls simultaneously => this will have more significant effect on for example http-request in effects
+    yield all([
+        takeEvery(actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga),
+        takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga),
+        takeEvery(actionTypes.AUTH_USER, authUserSaga),
+        takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga),
+    ]);
+    // yield takeEvery(actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga);
+    // yield takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga);
+    // yield takeEvery(actionTypes.AUTH_USER, authUserSaga);
+    // yield takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga);
 }
 
 export function* watchBurgerBuilder() {
@@ -18,6 +25,8 @@ export function* watchBurgerBuilder() {
 }
 
 export function* watchOrder() {
-    yield takeEvery(actionTypes.PURCHASE_BURGER, purchaseBurgerSaga);
+    // "takeLatest" will cancel all ongoing actions and only execute the latest => compare to rxjs
+    yield takeLatest(actionTypes.PURCHASE_BURGER, purchaseBurgerSaga);
+    // yield takeEvery(actionTypes.PURCHASE_BURGER, purchaseBurgerSaga);
     yield takeEvery(actionTypes.FETCH_ORDERS, fetchOrdersSaga);
 }

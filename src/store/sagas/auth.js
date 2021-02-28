@@ -14,6 +14,8 @@ import axios from "axios";
 //   => for example to wait for async-code to finish
 export function* logoutSaga(action) {
     // each step must be prefixed with yield => and than it will wait for it to finish
+    // using call from redux-saga/effects => to make it possible to mock this call during testing
+    //yield call([localStorage, 'removeItem'], "token");
     yield localStorage.removeItem('token');
     yield localStorage.removeItem('expirationDate');
     yield localStorage.removeItem('userId');
